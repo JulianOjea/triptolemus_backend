@@ -16,6 +16,14 @@ const pool = new Pool({
 // Middleware para leer JSON en las peticiones
 app.use(express.json());
 
+// Middleware para manejo de CORS
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:4200");  // Permitir peticiones desde el cliente Angular
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Permitir métodos HTTP
+  next();
+});
+
 // Comprobar conexión
 pool.connect()
   .then(() => console.log('Conectado a la base de datos'))
