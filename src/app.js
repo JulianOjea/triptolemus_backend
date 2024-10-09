@@ -3,6 +3,7 @@ const express = require('express');
 const { Pool } = require('pg');
 const app = express();
 const questionRoutes = require('./routes/questions');
+const categoryRoutes = require('./routes/category');
 
 // Configurar la conexión con la base de datos
 const pool = new Pool({
@@ -31,6 +32,7 @@ pool.connect()
 
 // Rutas
 app.use('/questions', questionRoutes(pool));
+app.use('/category', categoryRoutes(pool));
 
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
