@@ -17,13 +17,13 @@ export const userRoutes = (pool) => {
 
     // Ruta para iniciar sesión
     router.post('/login', async (req, res) => {
-        // const { username, password } = req.body;
-        // try {
-        //     const user = await User.login({ username, password }, pool);
-        //     res.send({ user });
-        // } catch (error) {
-        //     res.status(401).send(error.message);
-        // }
+        const { username, password} = req.body;
+        try{
+            const user = await User.login({username, password}, pool);
+            res.send({user})
+        }catch (error){
+            res.status(401).send(error.message);
+        }
     });
     //app.post('/logout', (req, res) => {});
     //app.post('/protected', (req, res) => {});
