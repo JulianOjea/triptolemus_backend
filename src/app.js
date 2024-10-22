@@ -1,9 +1,18 @@
-require('dotenv').config();
-const express = require('express');
-const { Pool } = require('pg');
+import dotenv from 'dotenv';
+import express from 'express';
+
+import pkg from 'pg';
+const { Pool } = pkg;
+import { PORT } from './config.js'; 
+
+
+import {questionRoutes} from './routes/questions.js';
+import {categoryRoutes} from './routes/category.js';
+import {userRoutes} from './routes/userRoutes.js';
+
+
 const app = express();
-const questionRoutes = require('./routes/questions');
-const categoryRoutes = require('./routes/category');
+dotenv.config();
 
 // Configurar la conexión con la base de datos
 const pool = new Pool({
@@ -33,12 +42,10 @@ pool.connect()
 // Rutas
 app.use('/questions', questionRoutes(pool));
 app.use('/category', categoryRoutes(pool));
+app.use('/users', userRoutes(pool));
 
 // Iniciar el servidor
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
-
-
 

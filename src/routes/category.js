@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 
-module.exports = (pool) => {
+export const categoryRoutes = (pool) => {
     // Obtener todas las categorías
     router.get('/', async (req, res) => {
       try {

@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 // Exportar el router con el pool
-module.exports = (pool) => {
+export const questionRoutes = (pool) => {
   // Obtener todas las preguntas
   router.get('/', async (req, res) => {
     try {
