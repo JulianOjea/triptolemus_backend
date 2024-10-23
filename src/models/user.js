@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import {z} from 'zod';
+import jwt from 'jsonwebtoken';
 
 import { SALT_ROUNDS } from '../config.js';
 
@@ -34,10 +35,16 @@ export class User{
         const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) throw new Error('Invalid password');
 
+        const token = jwt.sign(
+            { id: user.user_id, email: user.user_name },
+            process.env.JWT_SECRET,           
+            { expiresIn: '1h' }   
+          );
+
         //deleting password from user
         const {password: _, ...publicUser} = user;
 
-        return publicUser;
+        return { user: publicUser, token};
     }
 }
 

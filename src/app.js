@@ -10,6 +10,8 @@ import {questionRoutes} from './routes/questions.js';
 import {categoryRoutes} from './routes/category.js';
 import {userRoutes} from './routes/userRoutes.js';
 
+import { verifyToken } from './auth.js';
+
 
 const app = express();
 dotenv.config();
@@ -26,11 +28,17 @@ const pool = new Pool({
 // Middleware para leer JSON en las peticiones
 app.use(express.json());
 
+
 // Middleware para manejo de CORS
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:4200");  // Permitir peticiones desde el cliente Angular
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Permitir métodos HTTP
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+
   next();
 });
 
@@ -40,8 +48,8 @@ pool.connect()
   .catch(err => console.error('Error al conectar a la base de datos', err));
 
 // Rutas
-app.use('/questions', questionRoutes(pool));
-app.use('/category', categoryRoutes(pool));
+app.use('/questions', verifyToken, questionRoutes(pool));
+app.use('/category', verifyToken, categoryRoutes(pool));
 app.use('/users', userRoutes(pool));
 
 // Iniciar el servidor

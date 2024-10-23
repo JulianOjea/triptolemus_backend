@@ -19,8 +19,8 @@ export const userRoutes = (pool) => {
     router.post('/login', async (req, res) => {
         const { username, password} = req.body;
         try{
-            const user = await User.login({username, password}, pool);
-            res.send({user})
+            const {user, token} = await User.login({username, password}, pool);
+            res.send({user, token})
         }catch (error){
             res.status(401).send(error.message);
         }
