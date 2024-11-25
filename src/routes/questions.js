@@ -64,5 +64,37 @@ export const questionRoutes = (pool) => {
     }
   });
 
+  router.put('/:id', async (req, res) => {
+    const { id } = req.params;
+    const { text, category_name } = req.body;
+
+    if (!text || !category_name) {
+      return res.status(400).send('Faltan campos obligatorios');
+    }
+
+    try {
+      const categoriaResult = await pool.query('SELECT id FROM category WHERE name = $1', [category_name]);
+      if (categoriaResult.rowCount === 0) {
+        return res.status(400).send('La categoría no existe');
+      }
+
+      const id_categoria = categoriaResult.rows[0].id;
+
+      const result = await pool.query(
+        'UPDATE question SET text = $1, category_id = $2 WHERE id = $3 RETURNING *',
+        [text, id_categoria, id]
+      );
+
+      if (result.rowCount === 0) {
+        return res.status(404).send('Pregunta no encontrada');
+      }
+
+      res.status(200).json(result.rows[0]);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error al actualizar la pregunta');
+    }
+  });
+  
   return router; // Devuelve el router
 };
