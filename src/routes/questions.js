@@ -44,5 +44,25 @@ export const questionRoutes = (pool) => {
     }
   });
 
+  // Ruta para eliminar una pregunta por ID
+  router.delete('/:id', async (req, res) => {
+    const { id } = req.params; // Obtener el ID de la pregunta a eliminar
+
+    try {
+      // Realizar la consulta para eliminar la pregunta
+      const result = await pool.query('DELETE FROM question WHERE id = $1 RETURNING *', [id]);
+      
+      // Verificar si se eliminó alguna fila
+      if (result.rowCount === 0) {
+        return res.status(404).send('Pregunta no encontrada'); // Si no se eliminó ninguna fila, devolver un error
+      }
+
+      res.status(200).json(result.rows[0]); // Enviar respuesta 204 No Content
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error al eliminar la pregunta');
+    }
+  });
+
   return router; // Devuelve el router
 };
