@@ -28,12 +28,12 @@ export class User{
         Validation.validateCredentials(username, password);
 
         const result = await pool.query('SELECT * FROM user_admin WHERE user_name = $1', [username]);
-        if (result.rowCount === 0) throw new Error('User doesnt exist');
+        if (result.rowCount === 0) throw new Error('Invalid credentials');
 
         const user = result.rows[0]; 
 
         const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) throw new Error('Invalid password');
+        if (!isValid) throw new Error('Invalid credentials');
 
         const token = jwt.sign(
             { id: user.user_id, email: user.user_name },
