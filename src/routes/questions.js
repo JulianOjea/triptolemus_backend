@@ -16,8 +16,8 @@ export const questionRoutes = (pool) => {
 
   // Question Post
   router.post('/', async (req, res) => {
-    const { text, category_name } = req.body; // Recibimos el nombre de la categoría en lugar del id_categoria
-    if (!text || !category_name) {
+    const { text, category_name, user_name } = req.body; // Recibimos el nombre de la categoría en lugar del id_categoria
+    if (!text || !category_name || !user_name) {
       return res.status(400).send('Faltan campos obligatorios');
     }
 
@@ -33,8 +33,8 @@ export const questionRoutes = (pool) => {
 
       // Insertar la nueva pregunta con el id de la categoría
       const result = await pool.query(
-        'INSERT INTO question (text, category_id) VALUES ($1, $2) RETURNING *',
-        [text, id_categoria]
+        'INSERT INTO question (text, category_id, user_name) VALUES ($1, $2, $3) RETURNING *',
+        [text, id_categoria, user_name]
       );
 
       res.status(201).json(result.rows[0]); // Devolvemos la pregunta creada con código 201 (creado)
