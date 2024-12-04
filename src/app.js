@@ -9,6 +9,8 @@ import { PORT } from './config.js';
 import {questionRoutes} from './routes/questions.js';
 import {categoryRoutes} from './routes/category.js';
 import {userRoutes} from './routes/userRoutes.js';
+import {publicCategoryRoutes} from './routes/publicCategory.js';
+import {publicQuestionRoutes} from './routes/publicQuestion.js';
 
 import { verifyToken } from './auth.js';
 
@@ -51,6 +53,9 @@ pool.connect()
 app.use('/questions', verifyToken, questionRoutes(pool));
 app.use('/category', verifyToken, categoryRoutes(pool));
 app.use('/users', userRoutes(pool));
+
+app.use('/public/category', publicCategoryRoutes(pool));
+app.use('/public/question', publicQuestionRoutes(pool));
 
 // Iniciar el servidor
 app.listen(PORT, () => {
