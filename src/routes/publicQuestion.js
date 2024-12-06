@@ -4,7 +4,7 @@ const router = express.Router();
 export const publicQuestionRoutes = (pool) => {
     router.get('/', async (req, res) => {
       try {
-        const result = await pool.query('SELECT * FROM question');
+        const result = await pool.query('SELECT id, text, category_id FROM question');
         res.json(result.rows);
       } catch (error) {
         console.error(error);
