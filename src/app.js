@@ -11,12 +11,15 @@ import {categoryRoutes} from './routes/category.js';
 import {userRoutes} from './routes/userRoutes.js';
 import {publicCategoryRoutes} from './routes/publicCategory.js';
 import {publicQuestionRoutes} from './routes/publicQuestion.js';
+import {fcmRoutes} from './routes/fcm.js';
 
 import { verifyToken } from './auth.js';
 
 
 const app = express();
+app.use(express.json());
 dotenv.config();
+
 
 // Configurar la conexión con la base de datos
 const pool = new Pool({
@@ -56,6 +59,29 @@ app.use('/users', userRoutes(pool));
 
 app.use('/public/category', publicCategoryRoutes(pool));
 app.use('/public/question', publicQuestionRoutes(pool));
+
+app.use('/fcm', fcmRoutes(pool));
+
+
+app.post("/send-notification", async (req, res) => {
+  const { token, data } = req.body;
+
+  if (!token || !data) {
+    return res.status(400).json({ error: "Faltan parámetros" });
+  }
+
+  const message = {
+    token,
+    data ,
+  };
+
+  try {
+    const response = await admin.messaging().send(message);
+    res.json({ success: true, response });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Iniciar el servidor
 app.listen(PORT, () => {
