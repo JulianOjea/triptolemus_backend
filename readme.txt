@@ -5,3 +5,5 @@ en vez de "dev": "nodemon src/app.js" se puede usar "dev": "node --watch index.j
 
 validaciones con zod
 bcript para encriptacion de contraseña
+
+dev run with: npm run dev

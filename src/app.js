@@ -1,10 +1,11 @@
 import dotenv from 'dotenv';
+dotenv.config();
+import { PORT } from './config.js'; 
+
 import express from 'express';
 
 import pkg from 'pg';
 const { Pool } = pkg;
-import { PORT } from './config.js'; 
-
 
 import {questionRoutes} from './routes/questions.js';
 import {categoryRoutes} from './routes/category.js';
@@ -18,7 +19,6 @@ import { verifyToken } from './auth.js';
 
 const app = express();
 app.use(express.json());
-dotenv.config();
 
 
 // Configurar la conexión con la base de datos
