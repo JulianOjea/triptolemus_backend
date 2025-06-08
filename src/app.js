@@ -1,3 +1,4 @@
+import admin from './routes/fcm.js';
 import dotenv from 'dotenv';
 dotenv.config();
 import { PORT } from './config.js'; 
