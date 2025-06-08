@@ -34,10 +34,10 @@ const pool = new Pool({
 // Middleware para leer JSON en las peticiones
 app.use(express.json());
 
-
+const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:4200';
 // Middleware para manejo de CORS
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:4200");  // Permitir peticiones desde el cliente Angular
+  res.header("Access-Control-Allow-Origin", allowedOrigin);  // Permitir peticiones desde el cliente Angular
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Permitir métodos HTTP
 
